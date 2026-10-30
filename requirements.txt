@@ -6,5 +6,8 @@ numpy
 pandas
 scipy
 scikit-learn
+imbalanced-learn
 matplotlib
 seaborn
+neurokit2
+shap
