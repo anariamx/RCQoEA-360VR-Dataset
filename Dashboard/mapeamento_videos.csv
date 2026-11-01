@@ -1,0 +1,41 @@
+VideoID,conteudo,nome_conteudo_hipotese,configuracao,qp,uniforme,confirmado
+1,C1,VSenseLuther,QP15,15,True,False
+2,C1,VSenseLuther,QP22,22,True,False
+3,C1,VSenseLuther,QP32,32,True,False
+4,C1,VSenseLuther,QP42,42,True,False
+5,C1,VSenseLuther,QP22 6x3 gradual,22,False,False
+6,C1,VSenseLuther,QP22 6x3 abrupt,22,False,False
+7,C1,VSenseLuther,QP22 8x5 gradual,22,False,False
+8,C1,VSenseLuther,QP22 8x5 abrupt,22,False,False
+9,C2,VSenseVaude,QP15,15,True,False
+10,C2,VSenseVaude,QP22,22,True,False
+11,C2,VSenseVaude,QP32,32,True,False
+12,C2,VSenseVaude,QP42,42,True,False
+13,C2,VSenseVaude,QP22 6x3 gradual,22,False,False
+14,C2,VSenseVaude,QP22 6x3 abrupt,22,False,False
+15,C2,VSenseVaude,QP22 8x5 gradual,22,False,False
+16,C2,VSenseVaude,QP22 8x5 abrupt,22,False,False
+17,C3,OculusMotion,QP15,15,True,False
+18,C3,OculusMotion,QP22,22,True,False
+19,C3,OculusMotion,QP32,32,True,False
+20,C3,OculusMotion,QP42,42,True,False
+21,C3,OculusMotion,QP22 6x3 gradual,22,False,False
+22,C3,OculusMotion,QP22 6x3 abrupt,22,False,False
+23,C3,OculusMotion,QP22 8x5 gradual,22,False,False
+24,C3,OculusMotion,QP22 8x5 abrupt,22,False,False
+25,C4,NokiaFlamenco,QP15,15,True,False
+26,C4,NokiaFlamenco,QP22,22,True,False
+27,C4,NokiaFlamenco,QP32,32,True,False
+28,C4,NokiaFlamenco,QP42,42,True,False
+29,C4,NokiaFlamenco,QP22 6x3 gradual,22,False,False
+30,C4,NokiaFlamenco,QP22 6x3 abrupt,22,False,False
+31,C4,NokiaFlamenco,QP22 8x5 gradual,22,False,False
+32,C4,NokiaFlamenco,QP22 8x5 abrupt,22,False,False
+33,C5,BrazilMusic,QP15,15,True,False
+34,C5,BrazilMusic,QP22,22,True,False
+35,C5,BrazilMusic,QP32,32,True,False
+36,C5,BrazilMusic,QP42,42,True,False
+37,C5,BrazilMusic,QP22 6x3 gradual,22,False,False
+38,C5,BrazilMusic,QP22 6x3 abrupt,22,False,False
+39,C5,BrazilMusic,QP22 8x5 gradual,22,False,False
+40,C5,BrazilMusic,QP22 8x5 abrupt,22,False,False

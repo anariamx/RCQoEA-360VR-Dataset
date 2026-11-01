@@ -1,0 +1,9 @@
+streamlit>=1.50
+plotly>=5.24
+statsmodels
+pandas>=2.0
+numpy
+scipy
+scikit-learn
+neurokit2>=0.2.2
+openpyxl

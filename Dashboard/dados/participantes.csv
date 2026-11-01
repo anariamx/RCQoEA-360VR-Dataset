@@ -1,0 +1,33 @@
+Participant_id,Age,Gender,Wear Glasses,Color Blindness,Experience Using VR headset,Occupation,Consent to share physiological recordings,Comments,participante
+P1,29,Female,Yes,No,>20 times,PhD Student,Yes,,1
+P2,46,Male,Yes,No,>20 times,Lecturer,Yes,,2
+P3,25,Male,Yes,No,5-20 times,Msc Student,Yes,,3
+P4,43,Male,No,No,>20 times,PhD Student,Yes,,4
+P5,26,Female,Yes,No,<5 times,PhD Student,Yes,,5
+P6,30,Male,Yes,No,Everyday,Researcher,Yes,,6
+P7,29,Male,No,No,5-20 times,Researcher,Yes,,7
+P8,32,Female,No,No,5-20 times,PhD Student,Yes,,8
+P9,28,Male,No,No,<5 times,PhD Student,Yes,,9
+P10,37,Male,No,No,5-20 times,Software Manager,Yes,,10
+P11,35,Male,Yes,No,>20 times,Researcher,Yes,,11
+P12,38,Male,Yes,No,<5 times,Software Engineer,Yes,,12
+P13,34,Female,No,No,First time,Engineer,Yes,,13
+P14,37,Male,Yes,No,<5 times,Engineer,Yes,,14
+P15,42,Male,Yes,No,<5 times,Agility Coach,Yes,,15
+P16,40,Male,No,Moderate,First time,IT,Yes,missing EM data,16
+P17,18,Female,No,No,First time,Student,Yes,,17
+P18,47,Male,Yes,No,>20 times,Software Engineer,Yes,,18
+P19,39,Male,No,No,>20 times,Postdoc Researcher,Yes,,19
+P20,28,Male,No,No,>20 times,PhD Student,Yes,missing EM data,20
+P21,34,Male,No,No,>20 times,Software Engineer,Yes,,21
+P22,24,Male,No,No,<5 times,Msc Student,Yes,,22
+P23,28,Female,No,No,<5 times,PhD Student,Yes,missing EM data,23
+P24,40,Male,No,No,<5 times,Pharma Scientist,Yes,,24
+P25,33,Male,Yes,No,<5 times,Msc Student,Yes,,25
+P26,25,Female,No,No,<5 times,Msc Student,Yes,missing EM data,26
+P27,35,Male,No,No,5-20 times,Product Manager,Yes,,27
+P28,26,Female,Yes,No,<5 times,Research Assistant,Yes,,28
+P29,40,Female,No,No,First time,PhD Student,Yes,,29
+P30,34,Female,Yes,No,<5 times,Student,Yes,,30
+P31,31,Male,No,No,>20 times,PhD Student,Yes,,31
+P32,38,Male,No,No,First time,IT,Yes,,32
