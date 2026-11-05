@@ -116,10 +116,11 @@ def baixar(tabela, nome, chave):
 
 
 def curva_media(dados, coluna, grupo):
-    resumo = dados.groupby([grupo, "t"])[coluna].agg(["mean", "std", "count"]).reset_index()
+    resumo = dados.groupby([grupo, "t"], observed=True)[coluna].agg(["mean", "std", "count"]).reset_index()
+    resumo = resumo[resumo["count"] >= 0.2 * resumo.groupby(grupo, observed=True)["count"].transform("max")]
     resumo["ic"] = 1.96 * resumo["std"] / np.sqrt(resumo["count"])
     fig = go.Figure()
-    for i, (nome, g) in enumerate(resumo.groupby(grupo)):
+    for i, (nome, g) in enumerate(resumo.groupby(grupo, observed=True)):
         cor = px.colors.qualitative.Plotly[i % 10]
         fig.add_trace(go.Scatter(x=np.r_[g.t, g.t[::-1]], y=np.r_[g["mean"] + g.ic, (g["mean"] - g.ic)[::-1]],
                                  fill="toself", fillcolor=cor, opacity=0.15, line_width=0, showlegend=False, hoverinfo="skip"))
@@ -231,11 +232,18 @@ with abas[0]:
 with abas[1]:
     st.header("QoEC × MOS")
     st.caption("Curvas médias entre sessões com intervalo de confiança de 95%. Use para ver como a QoE contínua se forma "
-               "até virar a nota final e se a fisiologia acompanha.")
+               "até virar a nota final e se a fisiologia acompanha. Instantes com menos de 20% das sessões do grupo ficam "
+               "de fora, como as pontas da FC, onde quase não há batimento medido.")
+    hrv_grupo = ["FC_media", "RMSSD", "SDNN", "pNN50"]
+    grupos = {"configuracao": "Configuração", "MOS": "MOS dado", "conteudo": "Conteúdo", "bloco": "Bloco",
+              **{v: f"{v} (terços por participante)" for v in hrv_grupo},
+              **{q: f"{q} (terços)" for q in QUESTIONARIOS}}
     c = st.columns(3)
     var_tempo = c[0].selectbox("Variável no tempo", list(SERIES), format_func=lambda x: SERIES[x])
-    grupo = c[1].selectbox("Agrupar curvas por", ["configuracao", "MOS", "conteudo", "bloco"],
-                           format_func={"configuracao": "Configuração", "MOS": "MOS dado", "conteudo": "Conteúdo", "bloco": "Bloco"}.get)
+    grupo = c[1].selectbox("Agrupar curvas por", list(grupos), format_func=grupos.get,
+                           help="HRV: as sessões de cada participante são divididas em terços pelo valor da própria pessoa. "
+                                "Questionários têm uma resposta por bloco: cada sessão recebe a pontuação do seu bloco, "
+                                "e os participante × bloco da seleção são divididos em terços.")
     ajuste = c[2].selectbox("Ajuste", ["Original", "Subtrair linha de base (primeiros 3 s)", "Centralizar por participante"])
     dados_t = series.dropna(subset=[var_tempo]).copy()
     if ajuste.startswith("Subtrair"):
@@ -244,10 +252,36 @@ with abas[1]:
         dados_t[var_tempo] -= dados_t["base"]
     elif ajuste.startswith("Centralizar"):
         dados_t[var_tempo] -= dados_t.groupby("participante")[var_tempo].transform("mean")
-    fig, resumo = curva_media(dados_t, var_tempo, grupo)
-    fig.update_layout(height=430, xaxis_title="tempo (s)", yaxis_title=SERIES[var_tempo], title=f"{SERIES[var_tempo]} média por {grupo}")
-    st.plotly_chart(fig)
-    baixar(resumo, f"curva_{var_tempo}_{grupo}", "baixar_curva")
+    if grupo in QUESTIONARIOS:
+        q_sel = quest.merge(sessoes[["participante", "bloco"]].drop_duplicates()).dropna(subset=[grupo])
+        cortes = np.unique(q_sel[grupo].quantile([0, 1 / 3, 2 / 3, 1]))
+        if len(cortes) < 2:
+            dados_t = dados_t.iloc[0:0]
+        else:
+            nomes = {1: ["todos"], 2: ["baixo", "alto"], 3: ["baixo", "médio", "alto"]}[len(cortes) - 1]
+            rotulos = [f"{n} ({a:.2f} a {b:.2f})" for n, a, b in zip(nomes, cortes[:-1], cortes[1:])]
+            q_sel["faixa"] = pd.cut(q_sel[grupo], cortes, labels=rotulos, include_lowest=True)
+            dados_t = dados_t.drop(columns=grupo, errors="ignore").merge(q_sel[["participante", "bloco", "faixa"]])
+            dados_t[grupo] = dados_t.pop("faixa")
+            contagem = q_sel["faixa"].value_counts(sort=False)
+            st.caption(f"{descricao(grupo)}: {len(q_sel)} participante × bloco na seleção, divididos em "
+                       + ", ".join(f"{r} (n = {n})" for r, n in contagem.items()) + ".")
+    elif grupo in hrv_grupo:
+        posto = sessoes.groupby("participante")[grupo].rank(pct=True)
+        faixa = pd.cut(posto, [0, 1 / 3, 2 / 3, 1], labels=["baixo", "médio", "alto"], include_lowest=True)
+        dados_t = dados_t.merge(sessoes[["participante", "VideoID"]].assign(faixa=faixa))
+        dados_t[grupo] = dados_t.pop("faixa")
+        st.caption(f"{descricao(grupo)}: as sessões de cada participante são divididas em terços pelo valor da própria "
+                   "pessoa (baixo = o terço mais baixo daquela pessoa), para comparar estados e não pessoas diferentes.")
+    if dados_t.empty:
+        st.info("Não há dados suficientes na seleção para montar essas curvas.")
+    else:
+        fig, resumo = curva_media(dados_t, var_tempo, grupo)
+        fig.add_vline(x=0.4 * 30, line_dash="dot", line_color="gray", annotation_text="40% do vídeo")
+        fig.update_layout(height=430, xaxis_title="tempo (s)", yaxis_title=SERIES[var_tempo],
+                          title=f"{SERIES[var_tempo]} média por {grupos[grupo]}")
+        st.plotly_chart(fig)
+        baixar(resumo, f"curva_{var_tempo}_{grupo}", "baixar_curva")
 
     e, d = st.columns(2)
     with e:
